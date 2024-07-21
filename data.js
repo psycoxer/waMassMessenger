@@ -2,7 +2,8 @@ import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const phoneNumbersList = require("./phoneNumbersList.json");
 
-const messageText = "Reaction Test";
+const messageText = `Add your message here`;
+
 // const imgPath = "./image.png";
 const imgPath = null;
 
