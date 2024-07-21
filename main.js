@@ -1,6 +1,7 @@
-const { Client, LocalAuth, MessageMedia } = require("whatsapp-web.js");
-const qrcode = require("qrcode-terminal");
-const { phoneNumbersList, messageText, imgPath } = require("./data");
+import Whatsapp from "whatsapp-web.js";
+const { Client, LocalAuth, MessageMedia } = Whatsapp;
+import QrCode from "qrcode-terminal";
+import { phoneNumbersList, messageText, imgPath } from "./data.js";
 
 const wwebVersion = "2.2412.54";
 const client = new Client({
@@ -72,7 +73,7 @@ client.on("ready", async () => {
 });
 
 client.on("qr", (qr) => {
-  qrcode.generate(qr, { small: true });
+  QrCode.generate(qr, { small: true });
 });
 
 // client.on("message_create", (message) => {
