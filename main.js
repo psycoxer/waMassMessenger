@@ -1,6 +1,6 @@
 const { Client, LocalAuth, MessageMedia } = require("whatsapp-web.js");
 const qrcode = require("qrcode-terminal");
-const { phoneNumbersList, messageText } = require("./data");
+const { phoneNumbersList, messageText, imgPath } = require("./data");
 
 const wwebVersion = "2.2412.54";
 const client = new Client({
@@ -16,29 +16,58 @@ const client = new Client({
 });
 
 let chatids = [];
+let invalids = [];
 
 //DO NOT REMOVE THE COMMENTS, THEY ARE FOR DEBUGGING
 
 client.on("ready", async () => {
   console.log("Client is ready!");
 
-  await Promise.all(
+  await Promise.allSettled(
     phoneNumbersList.map(async (phoneNumber) => {
       const chatIdObj = await client.getNumberId(phoneNumber);
-      chatids.push(chatIdObj._serialized);
+      if (chatIdObj) {
+        chatids.push(chatIdObj._serialized);
+      } else {
+        invalids.push(phoneNumber);
+      }
     })
   );
 
-  //   for (const num of guinni) {
-  //     const chatIdObj = await client.getNumberId(num);
-  //     chatids.push(chatIdObj._serialized);
-  //   }
-
   console.log(chatids);
+  console.log(invalids);
 
-  for (const chatid of chatids) {
-    const media = MessageMedia.fromFilePath("./image.png");
-    client.sendMessage(chatid, media, { caption: messageText });
+  if (imgPath) {
+    for (const chatid of chatids) {
+      const media = MessageMedia.fromFilePath("./image.png");
+      client
+        .sendMessage(chatid, media, { caption: messageText })
+        .then((msg) => {
+          console.log(
+            `Sent for ${chatid}, Message: ${msg.body.substring(0, 15)}...`
+          );
+        })
+        .catch((msg) => {
+          console.log(
+            `Error for ${chatid}, Message: ${msg.body.substring(0, 15)}...`
+          );
+        });
+    }
+  } else {
+    for (const chatid of chatids) {
+      client
+        .sendMessage(chatid, messageText)
+        .then((msg) => {
+          console.log(
+            `Sent for ${chatid}, Message: ${msg.body.substring(0, 15)}...`
+          );
+        })
+        .catch((msg) => {
+          console.log(
+            `Error for ${chatid}, Message: ${msg.body.substring(0, 15)}...`
+          );
+        });
+    }
   }
 });
 
