@@ -14,8 +14,8 @@ To ensure you receive all the latest updates, important announcements, and valua
 
 Please join the group as soon as possible to ensure you don't miss out on any important information. Looking forward to seeing you in the group and on the journey to mastering Google Cloud! 🚀`;
 
-// const imgPath = "./image.png";
-const imgPath = null;
+const imgPath = "./image.png";
+// const imgPath = null;
 
 // console.log(phoneNumbersList);
 
